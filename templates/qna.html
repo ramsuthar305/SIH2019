@@ -1,0 +1,86 @@
+
+  				<div class="row">
+                	<div class="col-md-12">
+                    	<div class="row qna_heads">
+                    		<div class="col-md-4">
+                    			<i class="fas fa-reply forum_bicon"></i>
+                    				Replied by <a href="#">Ram Suthar</a>
+                    		</div>
+                    		<div class="col-md-8 forum_date">
+                    			on 22 feb 2019<span class="eye"><i class="fas fa-eye forum_view"></i>23456</span>
+                    		</div>
+                    	</div>
+                    </div>
+                    <div class="qna_answer">
+                    	<a href="#" style="color:">What is meant by SIH?</a>
+                    	<p>The .disabled class uses pointer-events: none to try to disable the link functionality of s, but that CSS property is not yet standardized. In addition, even in browsers that do support pointer-events: none, keyboard navigation remains unaffected, meaning that sighted keyboard users and users of assistive technologies will still be able to activate these links. So to be safe, add a tabindex="-1" attribute on these links (to prevent them from receiving keyboard focus) and use custom JavaScript to disable their functionality.</p>
+                    </div>
+
+                    <div class="reviews">
+                    	<span class="like_figure">23k</span><i class="fas fa-thumbs-up forum_review"></i>
+                    	<span class="like_figure">23k</span><i class="fas fa-thumbs-down forum_review"></i>
+                    	
+                    	<i class="fas fa-save forum_review"></i>
+
+
+                    	<!-- comment section begin -->
+                    	<a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+						    <span class="like_figure">23k</span><i class="fas fa-comments forum_review"></i>
+						</a>
+						{% include "comment.html" %} 
+						<div class="collapse" id="collapseExample">
+						  <div class="card card-body" style="background: transparent;border:none;padding: 1%;">
+						    <div class="card" style="width: 100%;background: transparent;">
+							  <div class="card-body" style="background: transparent;">
+							    <h5 class="card-title"><a href="#0">Ram Suthar</a></h5>
+							    <p class="card-subtitle mb-2 text-muted " style="font-size: 1.5vh;">Published on 21 feb 2019</p>
+							    <p class="card-text">Thanxx john it helped alot</p>
+							  </div>
+							</div>
+						  </div>
+						</div>
+						<div class="collapse" id="collapseExample">
+						  <div class="card card-body" style="background: transparent;border:none;padding: 1%;">
+						    <div class="card" style="width: 100%;background: transparent;">
+							  <div class="card-body" style="background: transparent;">
+							    <h5 class="card-title"><a href="#0">Ram Suthar</a></h5>
+							    <p class="card-subtitle mb-2 text-muted " style="font-size: 1.5vh;">Published on 21 feb 2019</p>
+							    <p class="card-text">Thanxx john it helped alot</p>
+							  </div>
+							</div>
+						  </div>
+						</div>
+					
+
+                    	<!-- Button trigger modal -->
+						<button type="link" class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModal" style="text-decoration: underline; 100%; border:none;">
+						  Report
+						</button>
+						<!-- Modal -->
+						<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLabel">Choose your reason?</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body">
+						        <button type="submit" class="btn btn-outline-dark" style="width: 100%; border:none; text-align: justify; padding-top:1%;">Ask a question..</button>
+						        <button type="submit" class="btn btn-outline-dark" style="width: 100%; border:none; text-align: justify; padding-top:1%;">Ask a question..</button>
+						        <button type="submit" class="btn btn-outline-dark" style="width: 100%; border:none; text-align: justify; padding-top:1%;">Ask a question..</button>
+						        <button type="submit" class="btn btn-outline-dark" style="width: 100%; border:none; text-align: justify; padding-top:1%;">Ask a question..</button><button type="submit" class="btn btn-outline-dark" style="width: 100%; border:none; text-align: justify; padding-top:1%;">Ask a question..</button>
+
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						        
+						      </div>
+						    </div>
+						  </div>
+						</div>
+                    	
+                    </div>
+                </div>
+  		
