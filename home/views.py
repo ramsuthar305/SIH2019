@@ -1,21 +1,24 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER
+from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER, SLIDER, QUESTIONS
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from .models import NewPage
 import time
 
+Session = {}
 
-Account_name = ""
+Session["login"] = False
+Session["account_name"] = None
+
 flag = 0
 # Create your views here.
 def tag_gen(tmp):
 	ps=PorterStemmer()
 	question=[]
 	answer=[]
-	
+
 	qid=tmp
 	question.append(tmp.Heading)
 	answer.append(tmp.Description)
@@ -58,31 +61,31 @@ def tag_gen(tmp):
 	return tags
 
 def login(request):
-	global Account_name
-	global flag 
+	global Session
+	global flag
 	if request.method == "POST":
 		data = request.POST
-		if data['login_popup']:		
+		if data['login_popup']:
 			em = data['email']
 			pa = data['password']
 			r = REGISTER.objects.filter(Email=em, Password=pa)
 			if(len(r)>0):
 				flag=1
-				Account_name=r[0].First_name
-				print(Account_name)
+				Session["account_name"]=r[0].First_name
+				print(Session["account_name"])
 
 
 		return redirect("/home/")
 
 def home(request):
-	global Account_name
+	global Session
 	if request.method =="POST":
 		print("in here")
 		data = request.POST
 		try:
 			if data['sub_popup']:
 				print("in sub popup")
-				article = ARTICLE(Heading = data['head1'], Description = data['des1'], User = Account_name)
+				article = ARTICLE(Heading = data['head1'], Description = data['des1'], User = Session["account_name"])
 				article.save()
 				tmp=ARTICLE.objects.all().last()
 				l=tag_gen(tmp)
@@ -95,25 +98,23 @@ def home(request):
 				tmp.save()
 
 		except Exception as e:
-			print("exception",e)	
+			print("exception",e)
 	length=0
 	context = {}
-	
+
 	home = HOME.objects.all()
 	l = len(home)
 	tmp=ARTICLE.objects.all()
 	context = {'company_name':home[l-1].Company_name, 'caption':home[l-1].Caption,
 	 'back_img': home[l-1].Back_img, 'curosal1': home[l-1].Curosal1,
 	  'curosal2': home[l-1].Curosal2, 'news_title': home[l-1].News_title,
-	   'news_img': home[l-1].News_img, 'News_des': home[l-1].News_des, 'account_name':Account_name}
+	   'news_img': home[l-1].News_img, 'News_des': home[l-1].News_des, 'account_name':Session["account_name"]}
 	tmp=(ARTICLE.objects.all()).reverse()
 	if len(tmp)!=length:
 		context["tmp"]=tmp
 		length=len(tmp)
-	print(Account_name)
+	print(Session["account_name"])
 	return render(request,'home.html',context)
-
-	
 
 def about(request):
 	context = {}
@@ -123,12 +124,20 @@ def about(request):
 	return render(request,'aboutus.html',context)
 
 def forum(request):
+
+	if request.method == "POST":
+		print("In here")
+		print(request.POST.get('question'))
+		print(request.POST.get('description'))
+		question_entry = QUESTIONS(question=request.POST.get('question'), description=request.POST.get('description'), likes=0, dislikes=0, reports=0)
+		question_entry.save()
+
+	print("Questions", QUESTIONS.objects.all())
+
 	return render(request, 'forum.html',{})
 
 def news(request):
 	return render(request, 'latest_news.html',{})
-
-
 
 def user_profile(request):
 	return render(request, 'profile.html',{})
@@ -190,13 +199,13 @@ def register(request):
 		pass1 = data['password']
 		pass2 = data['password1']
 		if pass1==pass2:
-			reg = REGISTER(First_name = data['first_name'], Last_name = data['last_name'], Gender = data['gender'], 
+			reg = REGISTER(First_name = data['first_name'], Last_name = data['last_name'], Gender = data['gender'],
 			Email = data['email'], Password = data['password'], Institution = data['institution'], Phone = data['phone'],
 			Date = data['date'], OTP = data['otp'])
 			reg.save()
 			return render(request,'home.html',{})
 		else:
-			context = {'print_status': "Both passwords don't match. Enter again!!!" }
+			context = {'print_status': "Passwords don't match. Enter again!!!" }
 			return render(request, 'register.html', context )
 	return render(request,'register.html',{})
 
@@ -204,8 +213,8 @@ def header(request):
 	return render(request, 'header.html', {})
 
 def logout(request):
-	global Account_name
-	Account_name = ""
+	global Session
+	Session["account_name"] = None
 	return redirect('/home/')
 
 
@@ -213,9 +222,8 @@ def news(request):
 	print("****************")
 	if request.POST.get('Signup') == "Submit":
 	    data=request.POST
-	    recent=NewPage(slider_heading=data["slider_heading"], slider_caption=data["slider_caption"], image_link=data["image_link"], heading=data["heading"], image1_link=data["image1_link"],contents=data["contents"])
+	    recent=SLIDER(slider_heading=data["slider_heading"], slider_caption=data["slider_caption"], image_link=data["image_link"], heading=data["heading"], image1_link=data["image1_link"],contents=data["contents"])
 	    recent.save()
-
 
 	'''context={'slider_heading':recent.slider_heading}
 	context={'slider_caption':recent.slider_caption}
@@ -235,6 +243,6 @@ def news(request):
 	context={'slider_heading': data1, 'slider_caption': data2, 'image_link': data3, 'obj_list':new}
 
 	print(data1)
-	
+
 
 	return render(request, "latest_news.html",  context)

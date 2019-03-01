@@ -3,17 +3,17 @@
 <!doctype html>
 <html lang="en">
   <head>
-  	
+
 
   	{% include "external.html" %}
   	<link rel="stylesheet" href="{% static 'forum.css' %}" type="text/css">
   	<link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">
   	<title>
-  		forum
+  		Knowledge Sharing Platform
   	</title>
   </head>
   <body>
-  	
+
   	{% include "nabar.html" %}
 
   	<!--notification bar starts -->
@@ -43,18 +43,19 @@
 							  </button>
 							</div>
 							<div class="modal-body" >
-								<form>
-									<div class="form-group" >
-										<textarea class="form-control" id="question" aria-describedby="questionHelp" placeholder="Enter Questions" style="font-size: 3vh;"></textarea>	
+								<form method="POST" action=".">
+									<div class="form-group">
+                    {% csrf_token %}
+										<textarea name="question" class="form-control" id="question" aria-describedby="questionHelp" placeholder="Enter Questions" style="font-size: 3vh;"></textarea>
 									</div>
 									<div class="form-group">
-										<textarea class="form-control" id="Description" aria-describedby="questionHelp" placeholder="Enter Questions Description" style="height: 20vh;"></textarea>	
+										<textarea name="description" class="form-control" id="Description" aria-describedby="questionHelp" placeholder="Enter Questions Description" style="height: 20vh;"></textarea>
 									</div>
-								</form>
 							</div>
 							<div class="modal-footer">
 							  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 							  <button type="submit" class="btn btn-outline-dark">Add Question</button>
+              </form>
 							</div>
 						  </div>
 						</div>
@@ -63,7 +64,7 @@
   		</div>
   	</section>
   	<!--notification bar ends -->
-  	
+
   	<!--question divisions starts -->
   	<section class="container-fluid">
   		<div class="  row">
@@ -119,7 +120,7 @@
 				<div class="forum_ad row">
 					<div class="col-md-12">
 						<div class="card mb-3">
-						 	<div class="container-fluid" style="padding-top: 2%;"> 
+						 	<div class="container-fluid" style="padding-top: 2%;">
 						  		<img src="https://www.dulwichpicturegallery.org.uk/media/7975/weddings-at-dulwich-picture-gallery_010.jpg" class="card-img-top" alt="...">
 						  	</div>
 							  <div class="card-body">
@@ -136,7 +137,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
   	</section>
   	<!--question divisions ends -->

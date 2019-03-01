@@ -51,39 +51,34 @@ class REGISTER(models.Model):
     Gender = models.CharField(max_length=10)
     OTP = models.CharField(max_length=20)
 
-
-class NewPage(models.Model):
+class SLIDER(models.Model):
+    slider_id=models.AutoField(primary_key=True)
     slider_heading = models.CharField(max_length=10000)
     slider_caption = models.CharField(max_length=10000)
     image_link = models.CharField(max_length=10000)
 
+class NewPage(models.Model):
     heading = models.CharField(max_length=10000)
     image1_link = models.CharField(max_length=10000)
     contents = models.CharField(max_length=10000,default='SOME STRING')
 
+class QUESTIONS(models.Model):
+    question_id=models.AutoField(primary_key=True)
+    question=models.CharField(max_length=100000)
+    description=models.CharField(max_length=100000)
+    likes=models.IntegerField()
+    dislikes=models.IntegerField()
+    reports=models.IntegerField()
 
-class Question(models.Model):
-    Question=models.CharField(max_length=100000)
-    Answer=models.CharField(max_length=10000000)
-    
-    likes=models.IntegerField(max_length=10000)
-    dislikes=models.IntegerField(max_length=10000)
-    reports=models.IntegerField(max_length=10000)
-    tags=models.CharField(max_length=1000000)
-
-class Answer(models.Model):
+class ANSWERS(models.Model):
     aid=models.AutoField(primary_key=True)
-    likes=models.IntegerField(max_length=10000)
-    dislikes=models.IntegerField(max_length=10000)
-    reports=models.IntegerField(max_length=10000)
+    likes=models.IntegerField()
+    dislikes=models.IntegerField()
+    reports=models.IntegerField()
     tags=models.CharField(max_length=1000000)
 
 class comment(models.Model):
     cid=models.AutoField(primary_key=True)
-    likes=models.IntegerField(max_length=10000)
-    dislikes=models.IntegerField(max_length=10000)
-    reports=models.IntegerField(max_length=10000)
-
-    
-
-
+    likes=models.IntegerField()
+    dislikes=models.IntegerField()
+    reports=models.IntegerField()
