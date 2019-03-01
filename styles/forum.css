@@ -1,3 +1,5 @@
+	
+
 .f_icon{
 	color:#2f3640;
 	font-size: 2.7vh;
@@ -10,6 +12,10 @@
 	font-size: 2vh;
 	margin-right: 2%;
 	margin-left: 2%;
+}
+
+.list-group-flush button{
+	background-color: transparent;
 }
 
 .forum_heading{
@@ -37,6 +43,8 @@
 	border-bottom:0.4px solid #b2bec3;
 }
 
+
+
 .aq{
 	text-align: center;
 	width: 50%;
@@ -45,11 +53,21 @@
 .aq:hover{
 	background-color: #2f3640;
 }
+.forum_cat button{
+	
+}
+.forum_cat{
+	
+	margin-top:2%;
+	font-size: 2.5vh;
+}
 
 .forum_main{
-	height: 150vh;
+	height: 190vh;
 	margin-top: 2%;
 	overflow-y: scroll;
+	padding-left: 2%;
+	padding-right:2%;
 }
 
 .forum_main::-webkit-scrollbar{
@@ -160,11 +178,15 @@
 	font-size: 1.8vh;
 	padding-right: 0.5%;
 }
-
+.card{
+	border:1px solid black;
+	background-color: transparent;
+}
 .forum_hot{
-	margin-top: 6%; 
+	margin-top: 8%; 
 	height: 75vh;
 	margin-bottom: 6%; 
+	background-color: transparent;
 }
 
 .ad_head{
@@ -179,6 +201,8 @@
 .modal-lg {
     max-width: 80%;
 }
+
+
 
 @media only screen and (max-width:600px){
 	.eye{
