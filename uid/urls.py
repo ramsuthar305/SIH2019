@@ -39,6 +39,7 @@ urlpatterns = [
     path('admin_registerpage/', views.admin_registerpage, name='admin_registerpage'),
     path('admin_category/', views.admin_category, name='admin_category'),
     path('user_registration/',views.register,name="user_registrarion"),
+    path('question_page/',views.question_page,name="question_page"),
 ]
 
 urlpatterns+=staticfiles_urlpatterns()

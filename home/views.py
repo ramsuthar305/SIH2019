@@ -224,7 +224,6 @@ def news(request):
 	    data=request.POST
 	    recent=SLIDER(slider_heading=data["slider_heading"], slider_caption=data["slider_caption"], image_link=data["image_link"], heading=data["heading"], image1_link=data["image1_link"],contents=data["contents"])
 	    recent.save()
-
 	'''context={'slider_heading':recent.slider_heading}
 	context={'slider_caption':recent.slider_caption}
 	context={'image_link':recent.image_link}
@@ -238,11 +237,9 @@ def news(request):
 	data3=new[id-1].image_link
 	print(data3)
 	print(new[id-1].image1_link)
-
-
 	context={'slider_heading': data1, 'slider_caption': data2, 'image_link': data3, 'obj_list':new}
-
 	print(data1)
-
-
 	return render(request, "latest_news.html",  context)
+
+def question_page(request):
+	return render(request,"answer.html",{})
