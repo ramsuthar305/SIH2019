@@ -67,11 +67,16 @@ class QUESTIONS(models.Model):
     question=models.CharField(max_length=100000)
     description=models.CharField(max_length=100000)
     likes=models.IntegerField()
+    categories=models.CharField(max_length=100000)
+    user_email=models.CharField(max_length=100000)
     dislikes=models.IntegerField()
     reports=models.IntegerField()
 
 class ANSWERS(models.Model):
-    aid=models.AutoField(primary_key=True)
+    answer_id=models.AutoField(primary_key=True)
+    answer=models.CharField(max_length=100000)
+    question_id = models.IntegerField()
+    user_email=models.CharField(max_length=100000)
     likes=models.IntegerField()
     dislikes=models.IntegerField()
     reports=models.IntegerField()
@@ -79,6 +84,8 @@ class ANSWERS(models.Model):
 
 class comment(models.Model):
     cid=models.AutoField(primary_key=True)
+    answer_id = models.IntegerField()
+    user_email = models.CharField(max_length=100000)
     likes=models.IntegerField()
     dislikes=models.IntegerField()
     reports=models.IntegerField()

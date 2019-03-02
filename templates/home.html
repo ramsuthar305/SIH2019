@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">
 
 
-    <title>Labour's Cluster</title>
+    <title></title>
   </head>
   <body>
-  	
-        
-    	  <!-- Button trigger modal --> 
-        
+
+
+    	  <!-- Button trigger modal -->
+
 
         <!-- Modal -->
         <div class="modal fade" id="blog" tabindex="-1" role="dialog" aria-labelledby="AddaPost" aria-hidden="true">
@@ -34,15 +34,15 @@
                   <div class="form-group">
                     <label for="exampleInputEmail1">heading</label>
                     <input type="text" name = "head1" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Heading">
-                    
+
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">description</label>
                     <input type="text" name="des1" class="form-control" id="exampleInputPassword1" placeholder="description">
                   </div>
-                  
+
                   <button type="submit" name="sub_popup" class="btn btn-primary" value = "sub_article">Submit</button>
-                </form>   
+                </form>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -51,7 +51,7 @@
             </div>
           </div>
         </div>
-              
+
         {% include "header.html" %}
         {% include "nabar.html" %}
         <section class="container-fluid wall">
@@ -61,15 +61,15 @@
           <p class="naam_niche">
             {{ caption }}
           </p>
-        </section> 
+        </section>
         <section class="container-fluid two_bns">
-          
+
           <div class="row">
             <div class="b">
-                <button type="button" class="btn btn-primary btn-lg btn-block" id="bt1" style="background-color: #2196F3;">{{ curosal1 }}</button>  
+                <button type="button" class="btn btn-primary btn-lg btn-block" id="bt1" style="background-color: #2196F3;">{{ curosal1 }}</button>
             </div>
             <div class="b">
-                <button type="button" class="btn btn-primary btn-lg btn-block" id="bt2" style="background-color: #03A9F4;"> {{ curosal2 }} </button>  
+                <button type="button" class="btn btn-primary btn-lg btn-block" id="bt2" style="background-color: #03A9F4;"> {{ curosal2 }} </button>
             </div>
           </div>
         </section>
@@ -100,11 +100,11 @@
         <!--Profile Card 5-->
 
         {% include "footer.html" %}
-    		
 
 
 
-    
+
+
 
 
 

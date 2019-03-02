@@ -1,67 +1,62 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER, SLIDER, QUESTIONS
-from nltk import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
+from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER, SLIDER, QUESTIONS, ANSWERS
+# from nltk import word_tokenize
+# from nltk.corpus import stopwords
+# from nltk.stem import PorterStemmer
 from .models import NewPage
 import time
 
-Session = {}
-
-Session["login"] = False
-Session["account_name"] = None
-
 flag = 0
 # Create your views here.
-def tag_gen(tmp):
-	ps=PorterStemmer()
-	question=[]
-	answer=[]
-
-	qid=tmp
-	question.append(tmp.Heading)
-	answer.append(tmp.Description)
-	answer1=" ".join(answer)
-	question1=" ".join(question)
-	question1=question1.lower()
-	answer1=answer1.lower()
-	answer=word_tokenize(answer1)
-
-	stop=set(stopwords.words('english'))
-	faltu=[',','.','hello','hi']
-	for w in faltu:
-		stop.add(w)
-	question=word_tokenize(question1)
-	tags=[]
-	for word in question:
-		m=ps.stem(word)
-		tags.append(m)
-	words=''
-	partial_token=[]
-	for words in tags:
-		if words not in stopf:
-			partial_token.append(words)
-	tags=[]
-	for words in partial_token:
-		if words not in tags:
-			tags.append(words)
-
-	taga=[]
-	for word in answer:
-		taga.append(ps.stem(word))
-	partial_token=[]
-	for words in taga:
-		if words not in stop:
-			partial_token.append(words)
-	words=''
-	for words in partial_token:
-		if words not in tags:
-			tags.append(words)
-	return tags
+# def tag_gen(tmp):
+# 	ps=PorterStemmer()
+# 	question=[]
+# 	answer=[]
+#
+# 	qid=tmp
+# 	question.append(tmp.Heading)
+# 	answer.append(tmp.Description)
+# 	answer1=" ".join(answer)
+# 	question1=" ".join(question)
+# 	question1=question1.lower()
+# 	answer1=answer1.lower()
+# 	answer=word_tokenize(answer1)
+#
+# 	stop=set(stopwords.words('english'))
+# 	faltu=[',','.','hello','hi']
+# 	for w in faltu:
+# 		stop.add(w)
+# 	question=word_tokenize(question1)
+# 	tags=[]
+# 	for word in question:
+# 		m=ps.stem(word)
+# 		tags.append(m)
+# 	words=''
+# 	partial_token=[]
+# 	for words in tags:
+# 		if words not in stopf:
+# 			partial_token.append(words)
+# 	tags=[]
+# 	for words in partial_token:
+# 		if words not in tags:
+# 			tags.append(words)
+#
+# 	taga=[]
+# 	for word in answer:
+# 		taga.append(ps.stem(word))
+# 	partial_token=[]
+# 	for words in taga:
+# 		if words not in stop:
+# 			partial_token.append(words)
+# 	words=''
+# 	for words in partial_token:
+# 		if words not in tags:
+# 			tags.append(words)
+# 	return tags
 
 def login(request):
-	global Session
+
 	global flag
 	if request.method == "POST":
 		data = request.POST
@@ -71,21 +66,27 @@ def login(request):
 			r = REGISTER.objects.filter(Email=em, Password=pa)
 			if(len(r)>0):
 				flag=1
-				Session["account_name"]=r[0].First_name
-				print(Session["account_name"])
+				request.session["login"] = True
+				request.session["account_name"] = str(r[0].First_name + " " + r[0].Last_name)
+				request.session["phone"] = str(r[0].Phone)
+				request.session["email"] = str(r[0].Email)
+				request.session['username'] = str(r[0].Email)
+				request.session['account_name'] = str(r[0].First_name + " " + r[0].Last_name)
+				request.session["institution"] = str(r[0].Institution)
+				print(request.session)
 
 
 		return redirect("/home/")
 
 def home(request):
-	global Session
+
 	if request.method =="POST":
 		print("in here")
 		data = request.POST
 		try:
 			if data['sub_popup']:
 				print("in sub popup")
-				article = ARTICLE(Heading = data['head1'], Description = data['des1'], User = Session["account_name"])
+				article = ARTICLE(Heading = data['head1'], Description = data['des1'], User = request.session["account_name"])
 				article.save()
 				tmp=ARTICLE.objects.all().last()
 				l=tag_gen(tmp)
@@ -102,21 +103,28 @@ def home(request):
 	length=0
 	context = {}
 
+	try:
+		print("TRY: ", request.session["account_name"])
+	except Exception as e:
+		print("Catch")
+		request.session["account_name"] = ""
+
 	home = HOME.objects.all()
 	l = len(home)
 	tmp=ARTICLE.objects.all()
 	context = {'company_name':home[l-1].Company_name, 'caption':home[l-1].Caption,
 	 'back_img': home[l-1].Back_img, 'curosal1': home[l-1].Curosal1,
 	  'curosal2': home[l-1].Curosal2, 'news_title': home[l-1].News_title,
-	   'news_img': home[l-1].News_img, 'News_des': home[l-1].News_des, 'account_name':Session["account_name"]}
+	   'news_img': home[l-1].News_img, 'News_des': home[l-1].News_des, 'account_name':request.session["account_name"]}
 	tmp=(ARTICLE.objects.all()).reverse()
 	if len(tmp)!=length:
 		context["tmp"]=tmp
 		length=len(tmp)
-	print(Session["account_name"])
+	print("request.session: ", request.session)
 	return render(request,'home.html',context)
 
 def about(request):
+
 	context = {}
 	aboutus = ABOUTUS.objects.all()
 	l = len(aboutus)
@@ -125,12 +133,16 @@ def about(request):
 
 def forum(request):
 
+	print("request.session: ", request.session['email'])
+
 	if request.method == "POST":
 		print("In here")
 		print(request.POST.get('question'))
 		print(request.POST.get('description'))
-		question_entry = QUESTIONS(question=request.POST.get('question'), description=request.POST.get('description'), likes=0, dislikes=0, reports=0)
+		question_entry = QUESTIONS(user_email=request.session["email"], question=request.POST.get('question'), description=request.POST.get('description'), likes=0, dislikes=0, reports=0)
+		print(question_entry)
 		question_entry.save()
+		return redirect("/forum/")
 
 	print("Questions", QUESTIONS.objects.all())
 
@@ -213,12 +225,13 @@ def header(request):
 	return render(request, 'header.html', {})
 
 def logout(request):
-	global Session
-	Session["account_name"] = None
+
+	request.session["account_name"] = False
+	request.session["login"] = False
 	return redirect('/home/')
 
-
 def news(request):
+
 	print("****************")
 	if request.POST.get('Signup') == "Submit":
 	    data=request.POST
@@ -237,12 +250,48 @@ def news(request):
 	data3=new[id-1].image_link
 	print(data3)
 	print(new[id-1].image1_link)
-	context={'slider_heading': data1, 'slider_caption': data2, 'image_link': data3, 'obj_list':new}
+	context={'slider_heading': data1, 'slider_caption': data2, 'image_link': data3, 'obj_list':new, 'account_name':request.session["account_name"]}
 	print(data1)
 	return render(request, "latest_news.html",  context)
 
 def question_page(request):
-	return render(request,"answer.html",{})
+
+	context = {}
+	context["account_name"] = request.session["account_name"]
+	context["institution"] = request.session["institution"]
+
+	if request.method == "POST":
+		print("#### IN  ####")
+		answer = request.POST.get("answer")
+		likes = 0
+		question_id = request.POST.get("question_id")
+		dislikes = 0
+		reports = 0
+		user_email = request.session["email"]
+		print("question_id:", question_id)
+
+		ans = ANSWERS(answer=answer, question_id=question_id, user_email=user_email, likes=likes, dislikes=dislikes, reports=reports)
+		ans.save()
+		return redirect("/question_page/")
+
+	answers = ANSWERS.objects.all()
+	questions = QUESTIONS.objects.all()
+
+	for x in questions:
+		print("#", x, " QUESTION: ", x.question_id)
+		for y in answers:
+			if y.question_id == x.question_id:
+				print("#", x, " Answer: ", y.answer, ", Question ID: ", x.question_id)
+
+
+
+	context["QUESTIONS"] = questions
+	context["ANSWERS"] = answers
+
+
+
+
+	return render(request,"answer.html", context	)
 
 def read_more(request):
 	return render(request,"article.html",{})

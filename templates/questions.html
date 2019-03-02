@@ -1,29 +1,27 @@
+
+{% for question in QUESTIONS %}
+
 <div class="question_box border border-secondary-flush">
     <div>
-        <p class="usr_detail text-secondary">Question Bucket * <a href="#">Education</a></p>
+        <p class="usr_detail text-secondary">Ministry <a href="#">Central</a></p>
     </div>
-    <p class="ch3"><a href="#" class="h4 text-dark " data-toggle="modal" data-target="#answer_pop" style="font-family: 'Crimson Text', serif;">What are your expectations from MIT ADT University?</a></p>
-
-
-
+    <p class="ch3"><a href="#" class="h4 text-dark " data-toggle="modal" data-target="#{{ question.question_id }}" style="font-family: 'Crimson Text', serif;">{{ question.question }}</a></p>
+    <p class="lead" style="font-size:2vh;margin-top:-2%;"><span style="font-weight:bold;">Description:</span> {{ question.description }}</p>
 
     <!--pop up-->
 
-    <div class="modal fade" id="answer_pop" tabindex="-1" role="dialog" aria-labelledby="answer_pop_label" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document" style="width: 300vh;height:300vh;">
+    <div class="modal fade" id="{{ question.question_id }}" tabindex="-1" role="dialog" aria-labelledby="answer_pop_label" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document" style="width: 50%;height:300vh;">
               <div class="modal-content" >
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-1.5%;">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h3 class=" ch31">What are your expectations from MIT ADT University?</h3>
-                    <div class="col-md-10 butns">
-                        <button class="btn btn-light " style="width:15%;margin-right:1%; height: 5vh; padding-top:-2%; background-color: white; border:none;"><i style="padding-right: 9%; font-size: 2.5vh;" class="fas fa-pen-nib"></i>Answer</button>
-                        <button class="btn btn-light " style="width:15%;margin-right:1%; height: 5vh; padding-top:-2%; background-color: white; border:none;"><i style="padding-right: 9%; font-size: 2.5vh;" class="fas fa-running"></i>Skip</button>
-                        <button class="btn btn-light " style="width:15%;margin-right:1%; height: 5vh; padding-top:-2%; background-color: white; border:none;"><i style="padding-right: 9%; font-size: 2.5vh;" class="fas fa-plus"></i>Follow</button>
-                        <button class="btn btn-light " style="width:15%;margin-right:1%; height: 5vh; padding-top:-2%; background-color: white; border:none;"><i style="padding-right: 9%; font-size: 2.5vh;" class="fas fa-exclamation-triangle"></i>Report</button>
-                        <button class="btn btn-light " style="width:15%;margin-right:1%; height: 5vh; padding-top:-2%; background-color: white; border:none;"><i style="padding-right: 9%; font-size: 2.5vh;" class="fas fa-share-alt"></i>Share</button>
-                    </div>
+                    <h3 class=" ch31">{{ question.question }}</h3>
+                    <p class="lead" style="font-size:2vh;"><span style="font-weight:bold;">Description:</span> {{ question.description }}</p>
+
+                    {% for answer in ANSWERS %}
+                    {% if answer.question_id == question.question_id %}
                     <div class="card text-center"></div>
                             <div class="card-body">
                                     <div class="row" style="padding-top:1%;">
@@ -31,22 +29,12 @@
                                             <i class="fas fa-user-circle "style="font-size:6vh;	"></i>
                                         </div>
                                         <div class="col-md-11">
-                                            <p class="usr_size"><a href="#" class="h6 text-dark">User's name</a><p class="text-muted usr_detail1">MIT school of engineering <span class="text-muted usr_detail1"> | 2 JUN 2019</span></p></p>
+                                            <p class="usr_size"><a href="#" class="h6 text-dark">{{ answer.user_email }}</a><p class="text-muted usr_detail1">{{ institution }}</p></p>
                                         </div>
-                                        
+
                                         <div class="row " style="padding: 2%; padding-left:4%;padding-right:4%;">
                                             <p for="expend" class="lead usr_size" style="text-align: justify;">
-                                                    My school computer administrators installed an extension on our chromebooks. GoGuardian. *cue ominous music*
-                                                    Before this horrible event, the only thing blocking us from .io and buzzfeed, etc. was chrominium m. There’s a neat little trick you can do there- at chrome://inspect, chrominium m had an inspect option. Type in window.close() into the console, and the entire extension would shut down. FREEDOM!
-                                                    Until I restarted my chromebook one day. It updated… And I couldn’t do this trick anymore. WHY? JUST WHY?
-                                                    I did a little investigation on GoGuardian. Tailor-made to torture students with chromebooks. I tried finding out a way to get into the school administrators’ accounts. No luck. chrome://extensions? Nope. It was force-installed with no way (that I know of) of deleting it.
-                                                    Now, during lessons I realised that students would go to boredbutton.com, which is somehow not blocked. And in bored button, you could play games (that are usually blocked) within the bored button frame. So I went to inspect the HTML code.
-                                                    My school computer administrators installed an extension on our chromebooks. GoGuardian. *cue ominous music*
-                                                    Before this horrible event, the only thing blocking us from .io and buzzfeed, etc. was chrominium m. There’s a neat little trick you can do there- at chrome://inspect, chrominium m had an inspect option. Type in window.close() into the console, and the entire extension would shut down. FREEDOM!
-                                                    Until I restarted my chromebook one day. It updated… And I couldn’t do this trick anymore. WHY? JUST WHY?
-                                                    I did a little investigation on GoGuardian. Tailor-made to torture students with chromebooks. I tried finding out a way to get into the school administrators’ accounts. No luck. chrome://extensions? Nope. It was force-installed with no way (that I know of) of deleting it.
-                                                    Now, during lessons I realised that students would go to boredbutton.com, which is somehow not blocked. And in bored button, you could play games (that are usually blocked) within the bored button frame. So I went to inspect the HTML code.
-                                                
+                                              {{ answer.answer }}
                                             </p>
                                         </div>
                                     </div>
@@ -67,18 +55,24 @@
                                                 <i class="fas fa-user-circle "style="font-size:6vh;	"></i>
                                             </div>
                                             <div class="col-md-10">
-                                                <p class="usr_size"><a href="#" class="h6 text-dark">User's name</a><p class="text-muted usr_detail1">MIT school of engineering <span class="text-muted usr_detail1"> | 2 JUN 2019</span></p></p>
+                                                <p class="usr_size"><a href="#" class="h6 text-dark">{{ account_name }}</a><p class="text-muted usr_detail1">{{ institution }} </p></p>
                                             </div>
                                         </div>
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+
                                     </div>
                                 </div>
-                            </div>      
-                        </div>      
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
                 </div>
+
             </div>
         </div>
     </div>
+
+
+
     <p class="time text-muted"><span style="font-weight:650;"> 3 People responded </span> : <a href="#" class="text-muted">3 hrs ago </a></p>
     <div>
         <button class="btn btn-light " type="button" data-toggle="collapse" data-target="#answer_box" aria-expanded="false" aria-controls="answer_box" style="width:15%;margin-right:1%;"><i style="padding-right: 9%; font-size: 2.5vh;" class="fas fa-pen-nib"></i>Answer</button>
@@ -94,19 +88,24 @@
                           <i class="fas fa-user-circle "style="font-size:6vh;	"></i>
                       </div>
                       <div class="col-md-11">
-                          <p class="usr_size"><a href="#" class="h6 text-dark">User's name</a><p class="text-muted usr_detail1">MIT school of engineering <span class="text-muted usr_detail1"> | 2 JUN 2019</span></p></p>
+                          <p class="usr_size"><a href="#" class="h6 text-dark">{{ account_name}}</a><p class="text-muted usr_detail1">{{institution}} <span class="text-muted usr_detail1"></span></p></p>
                       </div>
                   </div>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                  <form action="/question_page/" method="POST">
+{% csrf_token %}
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" name="answer"></textarea>
+                  <input type="hidden" name="question_id" value="{{ question.question_id }}">
                   <div style="padding-top:2vh;">
-                      <a href="#" class="btn btn-outline-dark" style="width:15%;">Post</a>
+
+                      <input type="submit" class="btn btn-outline-dark" style="width:15%;" value="Post" name="Submit"></a>
+                    </form>
                       <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:2%;"><i class="fas fa-bold"></i></a>
                       <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:1%;"><i class="fas fa-italic"></i></a>
                       <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:1%;"><i class="fas fa-list"></i></a>
                       <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:1%;"><i class="fas fa-list-ol"></i></a>
                       <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:1%;"><i class="fas fa-video"></i></a>
                       <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:1%;"><i class="fas fa-image"></i></a>
-                      <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:1%;"><i class="fas fa-link"></i></a>           
+                      <a class="text-dark" href="#" style="font-size: 3vh; padding-right:1%;padding-left:1%;"><i class="fas fa-link"></i></a>
                   </div>
               </div>
           </div>
@@ -114,3 +113,5 @@
 
     </div>
 </div>
+
+{% endfor %}
