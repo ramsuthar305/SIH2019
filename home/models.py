@@ -51,12 +51,6 @@ class REGISTER(models.Model):
     Gender = models.CharField(max_length=10)
     OTP = models.CharField(max_length=20)
 
-class SLIDER(models.Model):
-    slider_id=models.AutoField(primary_key=True)
-    slider_heading = models.CharField(max_length=10000)
-    slider_caption = models.CharField(max_length=10000)
-    image_link = models.CharField(max_length=10000)
-
 class NewPage(models.Model):
     heading = models.CharField(max_length=10000)
     image1_link = models.CharField(max_length=10000)
@@ -89,3 +83,13 @@ class comment(models.Model):
     likes=models.IntegerField()
     dislikes=models.IntegerField()
     reports=models.IntegerField()
+
+class slider(models.Model):
+    slider_heading = models.CharField(max_length=10000)
+    slider_caption = models.CharField(max_length=10000)
+    image_link = models.CharField(max_length=10000)
+
+class cards(models.Model):
+    heading = models.CharField(max_length=10000)
+    image1_link = models.CharField(max_length=10000)
+    contents = models.CharField(max_length=10000,default='SOME STRING')

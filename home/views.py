@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER, SLIDER, QUESTIONS, ANSWERS
+from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER,  QUESTIONS, ANSWERS, slider, cards
 # from nltk import word_tokenize
 # from nltk.corpus import stopwords
 # from nltk.stem import PorterStemmer
@@ -148,6 +148,23 @@ def forum(request):
 
 	return render(request, 'forum.html',{})
 
+# def edit(request):
+# 	context={}
+# 	foot1=FOOTER.objects.all()
+# 	l=len(foot1)
+# 	context['disclaimer'] = foot1[len(foot1)-1].Disclaimer
+# 	print(foot1[len(foot1)-1].Disclaimer)
+# 	context['email']=foot1[len(foot1)-1].Email
+# 	context['phone']=foot1[len(foot1)-1].Phone
+# 	context['facebook']=foot1[len(foot1)-1].Facebook
+# 	context['twitter']=foot1[len(foot1)-1].Twitter
+# 	context['google']=foot1[len(foot1)-1].Google
+# 	context['instagram']=foot1[len(foot1)-1].Instagram
+# 	context['terms']= foot1[len(foot1)-1].Terms
+#
+# 	return render(request,"admin_footer.html",context)
+
+
 def news(request):
 	print("****************")
 	if request.POST.get('Signup1')=="Add slider":
@@ -219,6 +236,19 @@ def admin_navbar(request):
 	return render(request, 'admin_navbar.html',{})
 
 def admin_footer(request):
+	context={}
+	foot1=FOOTER.objects.all()
+	l=len(foot1)
+	context['disclaimer'] = foot1[len(foot1)-1].Disclaimer
+	print(foot1[len(foot1)-1].Disclaimer)
+	context['email']=foot1[len(foot1)-1].Email
+	context['phone']=foot1[len(foot1)-1].Phone
+	context['facebook']=foot1[len(foot1)-1].Facebook
+	context['twitter']=foot1[len(foot1)-1].Twitter
+	context['google']=foot1[len(foot1)-1].Google
+	context['instagram']=foot1[len(foot1)-1].Instagram
+	context['terms']= foot1[len(foot1)-1].Terms
+
 	if request.method=="POST":
 		data = request.POST
 		foot = FOOTER(Disclaimer=data['disclaimer'], Email=data['email'], Phone=data['phone'], Facebook=data['facebook'], Twitter=data['twitter'], Google=data['google'], Instagram=data['instagram'], Terms=data['terms'])
@@ -227,6 +257,7 @@ def admin_footer(request):
 		l = len(foot1)
 		context = {'disclaimer':foot1[l-1].Disclaimer, 'email':foot1[l-1].Email, 'phone':foot1[l-1].Phone, 'facebook':foot1[l-1].Facebook, 'twitter':foot1[l-1].Twitter, 'google':foot1[l-1].Google, 'instagram':foot1[l-1].Instagram, 'terms': foot1[l-1].Terms}
 		return render(request, 'footer.html', context)
+
 	return render(request, 'admin_footer.html',{})
 
 def admin_latestnews(request):
