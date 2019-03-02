@@ -149,7 +149,50 @@ def forum(request):
 	return render(request, 'forum.html',{})
 
 def news(request):
-	return render(request, 'latest_news.html',{})
+	print("****************")
+	if request.POST.get('Signup1')=="Add slider":
+		print("**********")
+		data=request.POST
+		recent=slider(slider_heading=data["slider_heading"], slider_caption=data["slider_caption"], image_link=data["image_link"])
+		recent.save()
+
+	if request.POST.get('Signup2') == "Submit":
+	    data=request.POST
+	    recent=cards(heading=data["heading"], image1_link=data["image1_link"], contents=data["contents"] )
+	    recent.save()
+
+	context={}
+	new1=cards.objects.all()
+	context['obj_list']=new1
+
+	'''context={'slider_heading':recent.slider_heading}
+	context={'slider_caption':recent.slider_caption}
+	context={'image_link':recent.image_link}
+	print(recent.slider_heading)'''
+
+	new=slider.objects.all()
+	id = len(new)
+
+	'''print(new[id-1].id)
+	context['slider_heading']=new[id-1].slider_heading
+	context['slider_caption']=new[id-1].slider_caption
+	context['image_link']=new[id-1].image_link
+	print(new)
+	print(new[id-1].image_link)'''
+	list = []
+
+	for x in range(len(new)):
+		list.append(x+1)
+		print(new[x].id)
+		print(new[x].image_link)
+
+	print(list)
+
+	context['sliders'] = new
+	context['list_of_numbers'] = list
+	context['id'] = id
+
+	return render(request, "latest_news.html",  context)
 
 def user_profile(request):
 	return render(request, 'profile.html',{})
@@ -298,3 +341,24 @@ def read_more(request):
 
 def laws(request):
 	return render(request,"laws.html",{})
+
+def survey_q(request):
+	data = survey_question(questions="Specify your Gender : ")
+	data.save()
+	return HttpResponse("Done")
+
+def survey_a(request):
+	data = survey_answer(Gender = 'Male', Time = '8', Years = '5', age = '30', place = 'Pune',salary = '8000')
+	data.save()
+	return HttpResponse("Done")
+
+def survey(request):
+	if request.method=="POST":
+		data = request.POST
+		temp = int(data['time'])
+		if temp>8:
+			print_result="Law is being Violated"
+			law = "As per the Factories Act 1948, every adult (a person who has completed 18 years of age) cannot work for more than 48 hours in a week and not more than 9 hours in a day. According to Section 51 of the Act, the spread over should not exceed 10-1/2 hours.\nTo report the violations; Click here"
+			context={'result':print_result, 'law':law}
+			return render(request,'survey.html',context)
+	return render(request, 'survey.html', {})

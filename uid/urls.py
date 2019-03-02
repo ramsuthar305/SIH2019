@@ -26,7 +26,7 @@ urlpatterns = [
     path('news/', views.news, name='News'),
 
     path('header/', views.header, name = 'just_head'),
-    path('login/', views.login, name='login'),    
+    path('login/', views.login, name='login'),
     path('logout/', views.logout, name = 'logout'),
     path('user_profile/', views.user_profile, name='user_profile'),
     path('admins/', views.admin_home, name='admin_home'),
@@ -42,6 +42,10 @@ urlpatterns = [
     path('question_page/',views.question_page,name="question_page"),
     path('read_more/',views.read_more,name="article"),
     path('laws/',views.laws,name="laws"),
+    path('survey_q/',views.survey_q,name="surveyq"),
+    path('survey_a/',views.survey_a,name="surveya"),
+    path('survey/',views.survey,name="survey"),
+
 ]
 
 urlpatterns+=staticfiles_urlpatterns()
