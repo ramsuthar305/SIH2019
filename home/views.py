@@ -243,3 +243,6 @@ def news(request):
 
 def question_page(request):
 	return render(request,"answer.html",{})
+
+def read_more(request):
+	return render(request,"article.html",{})
