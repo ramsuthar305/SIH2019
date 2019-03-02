@@ -41,6 +41,7 @@ urlpatterns = [
     path('user_registration/',views.register,name="user_registrarion"),
     path('question_page/',views.question_page,name="question_page"),
     path('read_more/',views.read_more,name="article"),
+    path('laws/',views.laws,name="laws"),
 ]
 
 urlpatterns+=staticfiles_urlpatterns()
