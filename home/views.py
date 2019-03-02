@@ -237,3 +237,6 @@ def question_page(request):
 
 def read_more(request):
 	return render(request,"article.html",{})
+
+def laws(request):
+	return render(request,"laws.html",{})
