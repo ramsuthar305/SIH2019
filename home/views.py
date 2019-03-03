@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER,  QUESTIONS, ANSWERS, slider, cards
+from .models import HOME, HEAD, ABOUTUS, FOOTER, ARTICLE, REGISTER,  QUESTIONS, ANSWERS, slider, cards, AGGREGATED_DATA
 # from nltk import word_tokenize
 # from nltk.corpus import stopwords
 # from nltk.stem import PorterStemmer
 from .models import NewPage
 import time
+import requests as ay_rq
+from bs4 import BeautifulSoup
+
 
 flag = 0
 # Create your views here.
@@ -174,13 +177,14 @@ def news(request):
 		recent.save()
 
 	if request.POST.get('Signup2') == "Submit":
-	    data=request.POST
-	    recent=cards(heading=data["heading"], image1_link=data["image1_link"], contents=data["contents"] )
-	    recent.save()
+		data=request.POST
+		recent=cards(heading=data["heading"], image1_link=data["image1_link"], contents=data["contents"] )
+		recent.save()
 
 	context={}
-	new1=cards.objects.all()
+	new1=AGGREGATED_DATA.objects.all()
 	context['obj_list']=new1
+
 
 	'''context={'slider_heading':recent.slider_heading}
 	context={'slider_caption':recent.slider_caption}
@@ -202,12 +206,16 @@ def news(request):
 		list.append(x+1)
 		print(new[x].id)
 		print(new[x].image_link)
+		context["central_image_link"] = new[x].image_link
 
 	print(list)
+	print(new1)
 
 	context['sliders'] = new
 	context['list_of_numbers'] = list
 	context['id'] = id
+
+	print("agd_id:", new1[0].agd_id)
 
 	return render(request, "latest_news.html",  context)
 
@@ -304,29 +312,29 @@ def logout(request):
 	request.session["login"] = False
 	return redirect('/home/')
 
-def news(request):
-
-	print("****************")
-	if request.POST.get('Signup') == "Submit":
-	    data=request.POST
-	    recent=SLIDER(slider_heading=data["slider_heading"], slider_caption=data["slider_caption"], image_link=data["image_link"], heading=data["heading"], image1_link=data["image1_link"],contents=data["contents"])
-	    recent.save()
-	'''context={'slider_heading':recent.slider_heading}
-	context={'slider_caption':recent.slider_caption}
-	context={'image_link':recent.image_link}
-	print(recent.slider_heading)'''
-
-	new=NewPage.objects.all()
-	id = len(new)
-	print(new[id-1])
-	data1=new[id-1].slider_heading
-	data2=new[id-1].slider_caption
-	data3=new[id-1].image_link
-	print(data3)
-	print(new[id-1].image1_link)
-	context={'slider_heading': data1, 'slider_caption': data2, 'image_link': data3, 'obj_list':new, 'account_name':request.session["account_name"]}
-	print(data1)
-	return render(request, "latest_news.html",  context)
+# def news(request):
+#
+# 	print("****************")
+# 	if request.POST.get('Signup') == "Submit":
+# 		data=request.POST
+# 		recent=SLIDER(slider_heading=data["slider_heading"], slider_caption=data["slider_caption"], image_link=data["image_link"], heading=data["heading"], image1_link=data["image1_link"],contents=data["contents"])
+# 		recent.save()
+# 	'''context={'slider_heading':recent.slider_heading}
+# 	context={'slider_caption':recent.slider_caption}
+# 	context={'image_link':recent.image_link}
+# 	print(recent.slider_heading)'''
+#
+# 	new=SLIDER.objects.all()
+# 	id = len(new)
+# 	print(new[id-1])
+# 	data1=new[id-1].slider_heading
+# 	data2=new[id-1].slider_caption
+# 	data3=new[id-1].image_link
+# 	print(data3)
+# 	print(new[id-1].image1_link)
+# 	context={'slider_heading': data1, 'slider_caption': data2, 'image_link': data3, 'obj_list':new, 'account_name':request.session["account_name"]}
+# 	print(data1)
+# 	return render(request, "latest_news.html",  context)
 
 def question_page(request):
 
@@ -393,3 +401,136 @@ def survey(request):
 			context={'result':print_result, 'law':law}
 			return render(request,'survey.html',context)
 	return render(request, 'survey.html', {})
+
+def admin_aggregate(request):
+
+	context = {}
+
+	context["labour_gov_in"] = "Publish"
+	context["vvngli"] = "Publish"
+
+	if request.method == "POST":
+		try:
+			if request.POST["labour_gov_in"] == "Publish":
+				print("IN LABOUR GOV IN PUBLISH")
+				context["labour_gov_in"] = "Unpublish"
+				lists = extract_website_data()
+				latest_href, latest_text = zip(*lists)
+
+				for x in range(len(latest_text)):
+					object = AGGREGATED_DATA(website="https://labour.gov.in", institute_name="Central Ministry", article_heading=latest_text[x], pdf_links=latest_href[x])
+					print(object)
+					object.save()
+		except Exception as e:
+			print("Exception: req.post[labour_gov_in] = Publish", e)
+
+		try:
+			if request.POST["labour_gov_in"] == "Unpublish":
+				print("IN LABOUR GOV IN UNPUBLISH")
+				context["labour_gov_in"] = "Publish"
+				objects = AGGREGATED_DATA.objects.filter(website="https://labour.gov.in").delete()
+		except Exception as e:
+			print("Exception: req.post[labour_gov_in] = unPublish", e)
+
+		if request.POST["vvngli"] == "Publish":
+			print("IN VVNGLI IN PUBLISH")
+			context["vvngli"] = "Unpublish"
+			lists = extract_website_data2()
+			list_headings, list_content = zip(*lists)
+			print("\n######################################\n")
+			print("List Headings: ", len(list_headings))
+			print("\n######################################\n")
+			print("List Content: ", len(list_content))
+			print("\n######################################\n")
+			for x in range(len(list_headings)):
+				object = AGGREGATED_DATA(website="https://vvgnli.gov.in", institute_name="VV Giri National Labour Institute", article_heading=list_headings[x], html_content=str(list_content[x]))
+				print("Object:", object)
+				object.save()
+
+		try:
+			if request.POST["vvngli"] == "Unpublish":
+				print("IN VVNGLI IN UNPUBLISH")
+				context["vvngli"] = "Publish"
+				objects = AGGREGATED_DATA.objects.filter(website="https://vvgnli.gov.in").delete()
+
+		except Exception as e:
+			print("Exception: req.post[vvngli] = unPublish", e)
+
+
+	return render(request, "aggregate.html", context)
+
+def extract_website_data():
+
+	labour_gov_in = ay_rq.get("https://labour.gov.in/whats-new")
+	soup = BeautifulSoup(labour_gov_in.text, "html.parser")
+
+	table = soup.find(class_='views-table cols-4')
+
+	table_items_text = table.find_all('td')
+	table_items_href = table.find_all('a')
+	count0 = 0
+	count1 = 0
+
+	latest_text = []
+	latest_href = []
+
+	for item in table_items_text:
+		if (len(item.contents[0]) > 50):
+			#print("Prettify: ", item.prettify())
+			print("Content: ", item.contents[0])
+			#print("HREF: ", item.get("href"))
+			count0 += 1
+			latest_text.append(str(item.contents[0]))
+
+	for item in table_items_href:
+		#print("Prettify: ", item.prettify())
+		#print("Content: ", item.contents[0])
+		print("HREF: ", item.get("href"))
+		latest_href.append(item.get("href"))
+		count1 += 1
+
+	final_text = []
+
+	for text in latest_text:
+		new_char = ""
+		count = 0
+		for a in text:
+			if a.isalpha() and count == 0:
+				count = 1
+				new_char += a
+			elif count == 1:
+				new_char += a
+		final_text.append(new_char)
+
+	return zip(latest_href, final_text)
+	# print("TEXT:", count0)
+	# print("HREF:", count1)
+	# print(latest_href)
+	# print(latest_text)
+	# print(final_text)
+
+def extract_website_data2():
+
+	website = "https://vvgnli.gov.in"
+	vvngli = ay_rq.get(website)
+	soup = BeautifulSoup(vvngli.text, "html.parser")
+
+	links_of_content = soup.find(class_= "training_list")
+	list_of_ahref = links_of_content.find_all("a")
+
+	list_of_trainings = []
+	content_headings = []
+	for x in list_of_ahref:
+		content_headings.append(x.contents[0])
+		list_of_trainings.append(website + x.get("href"))
+
+	content_list = []
+
+	for training in range(len(list_of_trainings)):
+		temp_data_get = ay_rq.get(list_of_trainings[training])
+		soup = BeautifulSoup(temp_data_get.text, "html.parser")
+		list_of_data = soup.find(class_="content")
+		print(list_of_data)
+		content_list.append(list_of_data)
+
+	return zip(content_headings, content_list)

@@ -93,3 +93,11 @@ class cards(models.Model):
     heading = models.CharField(max_length=10000)
     image1_link = models.CharField(max_length=10000)
     contents = models.CharField(max_length=10000,default='SOME STRING')
+
+class AGGREGATED_DATA(models.Model):
+    agd_id = models.AutoField(primary_key=True)
+    website = models.CharField(max_length=10000)
+    html_content = models.TextField(default='None')
+    institute_name = models.CharField(max_length=10000)
+    article_heading = models.CharField(max_length=10000)
+    pdf_links = models.CharField(max_length=10000, default='None')

@@ -45,6 +45,8 @@ urlpatterns = [
     path('survey_q/',views.survey_q,name="surveyq"),
     path('survey_a/',views.survey_a,name="surveya"),
     path('survey/',views.survey,name="survey"),
+    path('admin_aggregate/',views.admin_aggregate,name="admin_aggregate"),
+
 
 ]
 
